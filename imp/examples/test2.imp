@@ -1,0 +1,13 @@
+ANSWER := 1;
+while (ANSWER <= 4) {
+  ANSWER := ANSWER + 1;
+  ANSWER := ANSWER * 2
+};
+ANSWER := ANSWER + 3;
+X := 2;
+if (X = ANSWER) {
+  Y := 3
+} else {
+  Y := 4
+}
+print ANSWER;

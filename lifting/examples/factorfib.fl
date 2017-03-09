@@ -1,0 +1,7 @@
+let rec f n =
+  let nextstep a n =
+    if a then n * f(n-1)
+    else f(n-1) + f(n-2) in
+  let a = true in
+  if n <= 1 then 1 else nextstep a n in
+f 10

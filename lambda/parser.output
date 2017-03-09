@@ -1,0 +1,225 @@
+   0  $accept : %entry% $end
+
+   1  parse : exprlist EOL
+
+   2  exprlist : expr exprlist
+   3           | expr
+
+   4  varlist : VAR
+   5          | VAR varlist
+
+   6  expr : VAR
+   7       | LPAREN exprlist RPAREN
+   8       | FUN varlist IMP exprlist
+   9       | LET VAR EQUAL exprlist IN exprlist
+
+  10  %entry% : '\001' parse
+
+state 0
+	$accept : . %entry% $end  (0)
+
+	'\001'  shift 1
+	.  error
+
+	%entry%  goto 2
+
+
+state 1
+	%entry% : '\001' . parse  (10)
+
+	FUN  shift 3
+	LET  shift 4
+	VAR  shift 5
+	LPAREN  shift 6
+	.  error
+
+	parse  goto 7
+	exprlist  goto 8
+	expr  goto 9
+
+
+state 2
+	$accept : %entry% . $end  (0)
+
+	$end  accept
+
+
+state 3
+	expr : FUN . varlist IMP exprlist  (8)
+
+	VAR  shift 10
+	.  error
+
+	varlist  goto 11
+
+
+state 4
+	expr : LET . VAR EQUAL exprlist IN exprlist  (9)
+
+	VAR  shift 12
+	.  error
+
+
+state 5
+	expr : VAR .  (6)
+
+	.  reduce 6
+
+
+state 6
+	expr : LPAREN . exprlist RPAREN  (7)
+
+	FUN  shift 3
+	LET  shift 4
+	VAR  shift 5
+	LPAREN  shift 6
+	.  error
+
+	exprlist  goto 13
+	expr  goto 9
+
+
+state 7
+	%entry% : '\001' parse .  (10)
+
+	.  reduce 10
+
+
+state 8
+	parse : exprlist . EOL  (1)
+
+	EOL  shift 14
+	.  error
+
+
+state 9
+	exprlist : expr . exprlist  (2)
+	exprlist : expr .  (3)
+
+	FUN  shift 3
+	LET  shift 4
+	VAR  shift 5
+	LPAREN  shift 6
+	IN  reduce 3
+	RPAREN  reduce 3
+	EOL  reduce 3
+
+	exprlist  goto 15
+	expr  goto 9
+
+
+state 10
+	varlist : VAR .  (4)
+	varlist : VAR . varlist  (5)
+
+	VAR  shift 10
+	IMP  reduce 4
+
+	varlist  goto 16
+
+
+state 11
+	expr : FUN varlist . IMP exprlist  (8)
+
+	IMP  shift 17
+	.  error
+
+
+state 12
+	expr : LET VAR . EQUAL exprlist IN exprlist  (9)
+
+	EQUAL  shift 18
+	.  error
+
+
+state 13
+	expr : LPAREN exprlist . RPAREN  (7)
+
+	RPAREN  shift 19
+	.  error
+
+
+state 14
+	parse : exprlist EOL .  (1)
+
+	.  reduce 1
+
+
+state 15
+	exprlist : expr exprlist .  (2)
+
+	.  reduce 2
+
+
+state 16
+	varlist : VAR varlist .  (5)
+
+	.  reduce 5
+
+
+state 17
+	expr : FUN varlist IMP . exprlist  (8)
+
+	FUN  shift 3
+	LET  shift 4
+	VAR  shift 5
+	LPAREN  shift 6
+	.  error
+
+	exprlist  goto 20
+	expr  goto 9
+
+
+state 18
+	expr : LET VAR EQUAL . exprlist IN exprlist  (9)
+
+	FUN  shift 3
+	LET  shift 4
+	VAR  shift 5
+	LPAREN  shift 6
+	.  error
+
+	exprlist  goto 21
+	expr  goto 9
+
+
+state 19
+	expr : LPAREN exprlist RPAREN .  (7)
+
+	.  reduce 7
+
+
+state 20
+	expr : FUN varlist IMP exprlist .  (8)
+
+	.  reduce 8
+
+
+state 21
+	expr : LET VAR EQUAL exprlist . IN exprlist  (9)
+
+	IN  shift 22
+	.  error
+
+
+state 22
+	expr : LET VAR EQUAL exprlist IN . exprlist  (9)
+
+	FUN  shift 3
+	LET  shift 4
+	VAR  shift 5
+	LPAREN  shift 6
+	.  error
+
+	exprlist  goto 23
+	expr  goto 9
+
+
+state 23
+	expr : LET VAR EQUAL exprlist IN exprlist .  (9)
+
+	.  reduce 9
+
+
+13 terminals, 6 nonterminals
+11 grammar rules, 24 states

@@ -1,0 +1,4 @@
+let d = 2 in
+let f x = x + d in
+let d = 1 in
+f 2

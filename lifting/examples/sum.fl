@@ -1,0 +1,5 @@
+let n = 100 in
+let rec sum m s =
+  if m > n then s
+  else sum (m + 1) (s + m)
+in sum 0 0
