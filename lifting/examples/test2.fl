@@ -1,1 +1,1 @@
-let f x y = if (x + y) = 5 then fun x -> x + 1 else fun x -> x + 2 in f 2 3
+let f x y = if (x + y) = 5 then fun x -> x + 1 else fun x -> x + 2 in f 2 3 1
